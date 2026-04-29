@@ -8,7 +8,6 @@ import { DiscordIcon } from "@/components/DiscordIcon";
 import { Loader2, RefreshCw, Plus, Check, ExternalLink, Trash2, Megaphone } from "lucide-react";
 import { toast } from "sonner";
 
-const DISCORD_CLIENT_ID = "1397197263011287040"; // will be replaced via build-time env if needed
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 
 type Guild = { guild_id: string; name: string; icon_url: string | null; bot_in_server: boolean };
