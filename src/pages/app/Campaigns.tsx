@@ -140,6 +140,25 @@ const Campaigns = () => {
 
                 <div className="mt-3 p-3 rounded-lg bg-secondary/40 text-sm whitespace-pre-wrap line-clamp-3">{c.message}</div>
 
+                {c.status === "sending" && (
+                  <div className="mt-3">
+                    <div className="flex items-center justify-between text-xs mb-1.5">
+                      <span className="text-primary font-bold flex items-center gap-1.5">
+                        <Loader2 className="h-3 w-3 animate-spin" /> Entregando DMs...
+                      </span>
+                      <span className="font-black tabular-nums">
+                        {c.total_delivered.toLocaleString("pt-BR")} / {c.target_count.toLocaleString("pt-BR")}
+                      </span>
+                    </div>
+                    <div className="h-2 rounded-full bg-secondary overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-primary to-primary-glow transition-all duration-500"
+                        style={{ width: `${Math.min(100, ((c.total_delivered + c.total_failed) / Math.max(1, c.target_count)) * 100)}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+
                 {c.status !== "draft" && (
                   <>
                     <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-center">
