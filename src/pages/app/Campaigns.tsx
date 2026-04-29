@@ -36,17 +36,24 @@ const Campaigns = () => {
 
   useEffect(() => { load(); }, [user]);
 
+  // Polling enquanto houver campanhas em "sending" — entrega progressiva estilo Meta Ads
+  useEffect(() => {
+    const hasSending = campaigns.some((c) => c.status === "sending");
+    if (!hasSending) return;
+    const t = setInterval(load, 2500);
+    return () => clearInterval(t);
+  }, [campaigns]);
+
   const send = async (id: string) => {
     setSending(id);
     const { data, error } = await supabase.functions.invoke("send-campaign", { body: { campaign_id: id } });
     setSending(null);
-    // Erros 4xx vêm em error.context (Response). Tentamos extrair a mensagem real.
     let errMsg = data?.error || error?.message;
     if (error && (error as any).context && typeof (error as any).context.json === "function") {
       try { const j = await (error as any).context.json(); errMsg = j?.error || errMsg; } catch {}
     }
     if (errMsg) { toast.error(errMsg, { duration: 8000 }); load(); return; }
-    toast.success(`Disparada! ${data.delivered} entregues.`);
+    toast.success(`Campanha em entrega! Acompanhe o progresso em tempo real.`);
     refreshProfile();
     load();
   };
