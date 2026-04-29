@@ -21,7 +21,7 @@ const AuthCallback = () => {
         // Maybe Supabase already auto-handled it via detectSessionInUrl
         const { data } = await supabase.auth.getSession();
         if (data.session) {
-          navigate("/app/servidores", { replace: true });
+          navigate("/app", { replace: true });
           return;
         }
         toast.error("Sessão inválida. Tente entrar novamente.");
@@ -36,7 +36,7 @@ const AuthCallback = () => {
         return;
       }
       toast.success("Conectado com Discord!");
-      navigate("/app/servidores", { replace: true });
+      navigate("/app", { replace: true });
     };
     run();
   }, [navigate]);
