@@ -21,7 +21,7 @@ const Auth = () => {
   }, []);
 
   if (loading) return <div className="min-h-screen grid place-items-center bg-background"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
-  if (user) return <Navigate to="/app/servidores" replace />;
+  if (user) return <Navigate to="/app" replace />;
 
   const loginWithDiscord = () => {
     if (!clientId) return toast.error("Configuração do Discord não carregada");
