@@ -17,7 +17,6 @@ import {
   MessageSquare,
   Users,
   Plus,
-  Activity,
   Send,
   BadgeCheck,
   MousePointerClick,
