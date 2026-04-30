@@ -112,90 +112,197 @@ const Landing = () => {
       </header>
 
       {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-hero">
-        <div className="absolute inset-0 -z-0 opacity-[0.04] pointer-events-none [background-image:linear-gradient(to_right,hsl(var(--foreground))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--foreground))_1px,transparent_1px)] [background-size:48px_48px]" />
+      <section className="relative overflow-hidden">
+        {/* glow background */}
+        <div className="absolute inset-0 -z-10 bg-background" />
+        <div className="absolute -z-10 top-[-15%] left-1/2 -translate-x-1/2 h-[700px] w-[1100px] rounded-full bg-primary/25 blur-[140px]" />
+        <div className="absolute -z-10 top-[20%] right-[-10%] h-[500px] w-[500px] rounded-full bg-[#9b6bff]/20 blur-[120px]" />
+        <div className="absolute inset-0 -z-10 opacity-[0.05] pointer-events-none [background-image:linear-gradient(to_right,hsl(var(--foreground))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--foreground))_1px,transparent_1px)] [background-size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_70%)]" />
 
-          <div className="relative max-w-7xl mx-auto px-5 md:px-8 pt-16 md:pt-28 pb-20 md:pb-32 text-center">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border bg-card/60 backdrop-blur text-xs font-medium text-muted-foreground mb-8">
-              <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
-              +2.184.337 DMs entregues no Discord
-            </div>
-
-          <h1 className="font-display font-bold tracking-tight leading-[1.05] text-[clamp(2.5rem,7vw,5.5rem)] max-w-5xl mx-auto">
-            Seu servidor tá vazio
-            <br />
-            porque <span className="text-gradient">ninguém sabe</span> que ele existe.
-          </h1>
-
-          <p className="mt-7 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            A gente coloca o link do seu servidor, loja ou projeto na DM de pessoas reais
-            do Discord — dentro do seu nicho. Você só paga{" "}
-            <span className="text-foreground font-semibold">R$ 0,05 por DM enviada</span>.
-          </p>
-
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <button
-              onClick={loginWithDiscord}
-              disabled={busy}
-              className="group inline-flex items-center gap-2.5 bg-primary hover:bg-primary-glow text-primary-foreground h-14 px-7 rounded-full font-semibold text-base transition-all disabled:opacity-60 shadow-glow"
-            >
-              {busy ? <Loader2 className="h-5 w-5 animate-spin" /> : <DiscordIcon className="h-5 w-5" />}
-              Entrar com Discord
-              <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
-            </button>
-            <button
-              onClick={() => scrollTo("como")}
-              className="inline-flex items-center gap-2 h-14 px-6 rounded-full font-semibold text-base text-foreground hover:bg-card transition-colors"
-            >
-              Ver como funciona
-            </button>
-          </div>
-
-          <p className="mt-5 text-xs text-muted-foreground">
-            Login em 5 segundos · Sem cartão · Mínimo R$ 25
-          </p>
-
-          {/* mock dashboard glance */}
-          <div className="relative mt-16 md:mt-20 max-w-5xl mx-auto">
-            <div className="absolute -inset-x-10 -top-10 -bottom-10 bg-gradient-primary opacity-20 blur-3xl rounded-full" />
-            <div className="relative rounded-2xl border border-border bg-card shadow-card overflow-hidden">
-              <div className="flex items-center gap-1.5 px-4 py-3 border-b border-border bg-card/50">
-                <span className="h-3 w-3 rounded-full bg-destructive/70" />
-                <span className="h-3 w-3 rounded-full bg-warning/70" />
-                <span className="h-3 w-3 rounded-full bg-success/70" />
-                <span className="ml-3 text-xs font-mono text-muted-foreground">serverboost.app/dashboard</span>
+        <div className="relative max-w-7xl mx-auto px-5 md:px-8 pt-14 md:pt-24 pb-20 md:pb-28">
+          <div className="grid lg:grid-cols-[1.15fr_1fr] gap-12 lg:gap-16 items-center">
+            {/* LEFT: copy */}
+            <div className="text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border bg-card/60 backdrop-blur text-xs font-medium text-muted-foreground mb-7">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-success opacity-75 animate-ping" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
+                </span>
+                +2.184.337 DMs entregues no Discord
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-border border-b border-border">
-                {[
-                  { l: "DMs entregues", v: "12.480" },
-                  { l: "Taxa de entrega", v: "98,2%" },
-                  { l: "Cliques no link", v: "1.842" },
-                  { l: "Custo por DM", v: "R$ 0,05" },
-                ].map((s) => (
-                  <div key={s.l} className="p-4 md:p-6 text-left">
-                    <div className="text-[11px] uppercase tracking-wider text-muted-foreground font-mono">
-                      {s.l}
-                    </div>
-                    <div className="mt-2 font-display font-bold text-2xl md:text-3xl tabular-nums">
-                      {s.v}
-                    </div>
-                  </div>
-                ))}
+
+              <h1 className="font-display font-bold tracking-tight leading-[1.02] text-[clamp(2.4rem,6vw,4.8rem)]">
+                Seu servidor tá vazio porque{" "}
+                <span className="relative inline-block">
+                  <span className="text-gradient">ninguém sabe</span>
+                  <svg className="absolute left-0 -bottom-2 w-full" height="14" viewBox="0 0 300 14" fill="none" preserveAspectRatio="none">
+                    <path d="M2 9C60 3 140 3 200 7C240 9.5 270 10 298 6" stroke="hsl(var(--primary))" strokeWidth="3" strokeLinecap="round" />
+                  </svg>
+                </span>{" "}
+                que ele existe.
+              </h1>
+
+              <p className="mt-7 text-lg md:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                A gente coloca o link do seu servidor, loja ou projeto na DM de pessoas reais
+                do Discord — dentro do seu nicho. Você só paga{" "}
+                <span className="text-foreground font-semibold">R$ 0,05 por DM enviada</span>.
+              </p>
+
+              <div className="mt-9 flex flex-col sm:flex-row items-center lg:items-stretch justify-center lg:justify-start gap-3">
+                <button
+                  onClick={loginWithDiscord}
+                  disabled={busy}
+                  className="group inline-flex items-center justify-center gap-2.5 bg-primary hover:bg-primary-glow text-primary-foreground h-14 px-7 rounded-full font-semibold text-base transition-all disabled:opacity-60 shadow-glow hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  {busy ? <Loader2 className="h-5 w-5 animate-spin" /> : <DiscordIcon className="h-5 w-5" />}
+                  Começar com Discord
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                </button>
+                <button
+                  onClick={() => scrollTo("como")}
+                  className="inline-flex items-center justify-center gap-2 h-14 px-6 rounded-full font-semibold text-base text-foreground border border-border hover:bg-card transition-colors"
+                >
+                  Ver como funciona
+                </button>
               </div>
-              <div className="p-6 text-left">
-                <div className="text-xs text-muted-foreground font-mono uppercase tracking-wider mb-3">
-                  Campanha ativa · Servidor de Trade BR
-                </div>
-                <div className="space-y-2">
-                  {[78, 52, 91, 33].map((w, i) => (
-                    <div key={i} className="flex items-center gap-3">
-                      <div className="text-xs text-muted-foreground w-16 font-mono">#{i + 1001}</div>
-                      <div className="flex-1 h-2 rounded-full bg-secondary overflow-hidden">
-                        <div className="h-full bg-gradient-primary" style={{ width: `${w}%` }} />
-                      </div>
-                      <div className="text-xs font-mono text-muted-foreground w-12 text-right">{w}%</div>
+
+              {/* trust row */}
+              <div className="mt-8 flex flex-col sm:flex-row items-center lg:items-start gap-4 lg:gap-6">
+                <div className="flex -space-x-2">
+                  {[
+                    "from-[#5865F2] to-[#8b5cf6]",
+                    "from-[#ec4899] to-[#f97316]",
+                    "from-[#10b981] to-[#06b6d4]",
+                    "from-[#f59e0b] to-[#ef4444]",
+                    "from-[#8b5cf6] to-[#5865F2]",
+                  ].map((g, i) => (
+                    <div
+                      key={i}
+                      className={`h-9 w-9 rounded-full bg-gradient-to-br ${g} ring-2 ring-background grid place-items-center text-[11px] font-bold text-white`}
+                    >
+                      {["LV", "MK", "JR", "AN", "PC"][i]}
                     </div>
                   ))}
+                </div>
+                <div className="text-left">
+                  <div className="flex items-center gap-1 text-warning">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <svg key={i} viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5">
+                        <path d="M10 1.5l2.7 5.5 6.05.88-4.38 4.27 1.04 6.05L10 15.4l-5.41 2.84 1.04-6.05L1.25 7.88 7.3 7l2.7-5.5z" />
+                      </svg>
+                    ))}
+                    <span className="text-foreground font-semibold ml-1.5 text-sm">4.9/5</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    +1.200 donos de servidor já usaram
+                  </p>
+                </div>
+              </div>
+
+              <p className="mt-6 text-xs text-muted-foreground font-mono">
+                ⚡ login em 5s · sem cartão · mínimo R$ 25
+              </p>
+            </div>
+
+            {/* RIGHT: Discord DM mockup */}
+            <div className="relative max-w-md mx-auto lg:max-w-none w-full">
+              {/* floating stat top */}
+              <div className="hidden md:flex absolute -top-4 -left-6 z-10 items-center gap-2.5 rounded-2xl border border-border bg-card/95 backdrop-blur px-4 py-3 shadow-card">
+                <div className="h-9 w-9 rounded-xl bg-success/15 grid place-items-center">
+                  <TrendingUp className="h-4 w-4 text-success" />
+                </div>
+                <div>
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-mono">novos membros</div>
+                  <div className="text-sm font-bold tabular-nums">+847 hoje</div>
+                </div>
+              </div>
+
+              {/* floating stat bottom */}
+              <div className="hidden md:flex absolute -bottom-4 -right-4 z-10 items-center gap-2.5 rounded-2xl border border-border bg-card/95 backdrop-blur px-4 py-3 shadow-card">
+                <div className="h-9 w-9 rounded-xl bg-primary/15 grid place-items-center">
+                  <Target className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-mono">CTR</div>
+                  <div className="text-sm font-bold tabular-nums">14,7%</div>
+                </div>
+              </div>
+
+              {/* Discord-like DM card */}
+              <div className="relative rounded-2xl border border-border bg-[#313338] shadow-2xl overflow-hidden">
+                {/* header */}
+                <div className="flex items-center gap-3 px-4 py-3 border-b border-black/30 bg-[#2b2d31]">
+                  <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-[#9b6bff] grid place-items-center text-white font-bold text-sm">
+                    S
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-semibold text-white">ServerBoost</div>
+                    <div className="text-[11px] text-emerald-400 flex items-center gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> online
+                    </div>
+                  </div>
+                  <div className="text-[10px] font-mono text-zinc-500">agora</div>
+                </div>
+
+                {/* messages */}
+                <div className="p-4 space-y-4 bg-[#313338]">
+                  <div className="flex gap-3">
+                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-[#9b6bff] flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-sm font-medium text-white">SeuServidor</span>
+                        <span className="text-[10px] text-zinc-500">hoje às 14:32</span>
+                      </div>
+                      <p className="text-sm text-zinc-200 mt-0.5 leading-relaxed">
+                        E aí! Vi que você curte trade. Tô abrindo um server BR focado em sinais
+                        diários e análise grátis. Quer dar uma olhada?
+                      </p>
+                      <a
+                        href="#"
+                        onClick={(e) => e.preventDefault()}
+                        className="mt-2 block rounded-lg border-l-4 border-primary bg-[#2b2d31] p-3 hover:bg-[#34363c] transition-colors"
+                      >
+                        <div className="text-[10px] font-semibold uppercase tracking-wider text-primary">
+                          Discord — Convite
+                        </div>
+                        <div className="text-sm font-semibold text-white mt-1">
+                          Trade BR · Sinais Diários
+                        </div>
+                        <div className="text-xs text-zinc-400 mt-0.5 flex items-center gap-3">
+                          <span className="flex items-center gap-1">
+                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> 2.847 online
+                          </span>
+                          <span>· 12.5k membros</span>
+                        </div>
+                        <div className="mt-2 text-[11px] text-primary font-medium">
+                          discord.gg/tradebr →
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3 pl-12">
+                    <div className="rounded-2xl rounded-tl-sm bg-primary px-4 py-2 max-w-[80%]">
+                      <p className="text-sm text-white">Caraca, é exatamente o que eu tava procurando 🔥</p>
+                    </div>
+                  </div>
+
+                  {/* typing indicator */}
+                  <div className="flex items-center gap-2 pl-12 text-xs text-zinc-500">
+                    <div className="flex gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-zinc-500 animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <span className="h-1.5 w-1.5 rounded-full bg-zinc-500 animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <span className="h-1.5 w-1.5 rounded-full bg-zinc-500 animate-bounce" style={{ animationDelay: "300ms" }} />
+                    </div>
+                    <span>está digitando...</span>
+                  </div>
+                </div>
+
+                {/* input */}
+                <div className="px-4 py-3 bg-[#383a40] border-t border-black/30">
+                  <div className="rounded-lg bg-[#2b2d31] px-3 py-2 text-sm text-zinc-500">
+                    Mensagem @ServerBoost
+                  </div>
                 </div>
               </div>
             </div>
