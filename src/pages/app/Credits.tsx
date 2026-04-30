@@ -71,7 +71,7 @@ const Credits = () => {
   const [txs, setTxs] = useState<Tx[]>([]);
   const [buying, setBuying] = useState<string | null>(null);
   const [tab, setTab] = useState<"shop" | "history">("shop");
-  const [customBRL, setCustomBRL] = useState<string>("50");
+  const [customBRL, setCustomBRL] = useState<string>("25");
   const [deposit, setDeposit] = useState<DepositInfo | null>(null);
   const [paid, setPaid] = useState(false);
   const pollRef = useRef<number | null>(null);
