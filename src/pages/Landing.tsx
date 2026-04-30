@@ -152,7 +152,7 @@ const Landing = () => {
           </div>
 
           <p className="mt-5 text-xs text-muted-foreground">
-            Login em 5 segundos · Sem cartão · Mínimo R$ 50
+            Login em 5 segundos · Sem cartão · Mínimo R$ 25
           </p>
 
           {/* mock dashboard glance */}
@@ -293,7 +293,7 @@ const Landing = () => {
                 n: "04",
                 icon: Zap,
                 t: "Paga via PIX",
-                d: "R$ 0,05 por DM. Compra a partir de R$ 50 (1.000 DMs). PIX cai, créditos entram na hora.",
+                d: "R$ 0,05 por DM. Compra a partir de R$ 25 (500 DMs). PIX cai, créditos entram na hora.",
               },
               {
                 n: "05",
@@ -337,7 +337,7 @@ const Landing = () => {
               <span className="text-gradient">R$ 0,05</span> por DM. Sem mensalidade.
             </h2>
             <p className="mt-5 text-muted-foreground text-base md:text-lg">
-              Compra créditos, usa quando quiser. Mínimo R$ 50 (1.000 DMs). Pode escolher qualquer valor acima disso.
+              Compra créditos, usa quando quiser. Mínimo R$ 25 (500 DMs). Pode escolher qualquer valor acima disso.
             </p>
           </div>
 
@@ -345,11 +345,11 @@ const Landing = () => {
             {[
               {
                 name: "Starter",
-                price: 50,
-                dms: 1000,
+                price: 25,
+                dms: 500,
                 bonus: null,
                 sub: "Pra testar",
-                features: ["1.000 DMs entregues", "R$ 0,05 por DM", "Dashboard completo", "Suporte via Discord"],
+                features: ["500 DMs entregues", "R$ 0,05 por DM", "Dashboard completo", "Suporte via Discord"],
               },
               {
                 name: "Pro",
@@ -442,7 +442,7 @@ const Landing = () => {
           </div>
 
           <p className="mt-8 text-center text-sm text-muted-foreground">
-            Ou compra qualquer valor a partir de R$ 50 — sempre R$ 0,05 por DM.
+            Ou compra qualquer valor a partir de R$ 25 — sempre R$ 0,05 por DM.
           </p>
         </div>
       </section>
@@ -519,7 +519,7 @@ const Landing = () => {
               },
               {
                 q: "Quanto custa exatamente cada DM?",
-                a: "R$ 0,05 por DM. R$ 50 = 1.000 DMs. R$ 100 = 2.200 DMs (com bônus). R$ 200 = 4.500 DMs. Pode escolher qualquer valor a partir de R$ 50.",
+                a: "R$ 0,05 por DM. R$ 25 = 500 DMs. R$ 50 = 1.000 DMs. R$ 100 = 2.200 DMs (com bônus). R$ 200 = 4.500 DMs. Pode escolher qualquer valor a partir de R$ 25.",
               },
               {
                 q: "Em quanto tempo a campanha começa?",
@@ -584,7 +584,7 @@ const Landing = () => {
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
               </button>
               <p className="mt-4 text-xs text-primary-foreground/70">
-                Login em 5s · Sem cartão · Mínimo R$ 50
+                Login em 5s · Sem cartão · Mínimo R$ 25
               </p>
             </div>
           </div>

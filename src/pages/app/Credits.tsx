@@ -21,8 +21,8 @@ type Tx = {
 
 // 1 DM = R$ 0,05  (internamente armazenado como "coins" no DB, mas exibimos sempre como DMs)
 const PRICE_PER_DM = 0.05;
-const MIN_DEPOSIT_BRL = 50;
-const MIN_DMS = Math.round(MIN_DEPOSIT_BRL / PRICE_PER_DM); // 1000
+const MIN_DEPOSIT_BRL = 25;
+const MIN_DMS = Math.round(MIN_DEPOSIT_BRL / PRICE_PER_DM); // 500
 
 const dmsToBRL = (dms: number) => dms * PRICE_PER_DM;
 const brlToDms = (brl: number) => Math.floor(brl / PRICE_PER_DM);
@@ -33,7 +33,7 @@ const formatDMs = (n: number) => n.toLocaleString("pt-BR");
 
 const PACKAGES = [
   {
-    dms: 1000, bonus: 0, priceBRL: 50, icon: Zap, label: "Starter",
+    dms: 500, bonus: 0, priceBRL: 25, icon: Zap, label: "Starter",
     desc: "Ideal pra testar", popular: false,
     accent: "from-sky-500 to-cyan-400",
   },
@@ -71,7 +71,7 @@ const Credits = () => {
   const [txs, setTxs] = useState<Tx[]>([]);
   const [buying, setBuying] = useState<string | null>(null);
   const [tab, setTab] = useState<"shop" | "history">("shop");
-  const [customBRL, setCustomBRL] = useState<string>("50");
+  const [customBRL, setCustomBRL] = useState<string>("25");
   const [deposit, setDeposit] = useState<DepositInfo | null>(null);
   const [paid, setPaid] = useState(false);
   const pollRef = useRef<number | null>(null);
