@@ -345,11 +345,11 @@ const Landing = () => {
             {[
               {
                 name: "Starter",
-                price: 50,
-                dms: 1000,
+                price: 25,
+                dms: 500,
                 bonus: null,
                 sub: "Pra testar",
-                features: ["1.000 DMs entregues", "R$ 0,05 por DM", "Dashboard completo", "Suporte via Discord"],
+                features: ["500 DMs entregues", "R$ 0,05 por DM", "Dashboard completo", "Suporte via Discord"],
               },
               {
                 name: "Pro",
