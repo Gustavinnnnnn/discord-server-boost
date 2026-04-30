@@ -204,7 +204,7 @@ const Credits = () => {
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <span className="px-2.5 py-1 rounded-lg bg-card border border-border font-bold">1 DM = R$ 0,05</span>
           <span className="px-2.5 py-1 rounded-lg bg-card border border-border font-bold">R$ 1 = 20 DMs</span>
-          <span className="px-2.5 py-1 rounded-lg bg-card border border-border font-bold">R$ 20 = 400 DMs</span>
+          <span className="px-2.5 py-1 rounded-lg bg-card border border-border font-bold">R$ 50 = 1.000 DMs</span>
           <span className="px-2.5 py-1 rounded-lg bg-card border border-border font-bold">R$ 100 = 2.000 DMs</span>
         </div>
       </div>
