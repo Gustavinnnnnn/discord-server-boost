@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { DiscordIcon } from "@/components/DiscordIcon";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import logo from "@/assets/logo.png";
+import { SupportFab } from "@/components/SupportFab";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 
@@ -37,9 +39,7 @@ const Auth = () => {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(235_86%_65%/0.15),transparent_50%)]" />
       <div className="relative w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex h-14 w-14 rounded-2xl bg-gradient-to-br from-primary to-primary-glow items-center justify-center shadow-glow mb-4">
-            <DiscordIcon className="h-7 w-7 text-white" />
-          </div>
+          <img src={logo} alt="ServerBoost" className="h-20 w-20 mx-auto rounded-2xl shadow-glow mb-4 object-cover" width={80} height={80} />
           <h1 className="text-3xl font-bold">ServerBoost</h1>
           <p className="text-muted-foreground text-sm mt-1">Cresça seu servidor do Discord de verdade</p>
         </div>
@@ -55,6 +55,7 @@ const Auth = () => {
           {!clientId && <p className="text-xs text-muted-foreground mt-3">Carregando...</p>}
         </div>
       </div>
+      <SupportFab />
     </div>
   );
 };

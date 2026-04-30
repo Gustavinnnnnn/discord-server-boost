@@ -3,6 +3,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { DiscordIcon } from "@/components/DiscordIcon";
+import { SupportFab } from "@/components/SupportFab";
+import logo from "@/assets/logo.png";
 import { toast } from "sonner";
 import {
   Loader2,
@@ -73,9 +75,7 @@ const Landing = () => {
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/60">
         <div className="max-w-7xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
           <a href="#" className="flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-xl bg-primary grid place-items-center shadow-glow">
-              <DiscordIcon className="h-5 w-5 text-primary-foreground" />
-            </div>
+            <img src={logo} alt="ServerBoost" className="h-10 w-10 rounded-xl object-cover" width={40} height={40} />
             <span className="font-bold text-lg tracking-tight">ServerBoost</span>
           </a>
 
@@ -619,6 +619,7 @@ const Landing = () => {
           </div>
         </div>
       </footer>
+      <SupportFab />
     </div>
   );
 };
