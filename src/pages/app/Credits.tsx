@@ -21,8 +21,8 @@ type Tx = {
 
 // 1 DM = R$ 0,05  (internamente armazenado como "coins" no DB, mas exibimos sempre como DMs)
 const PRICE_PER_DM = 0.05;
-const MIN_DEPOSIT_BRL = 20;
-const MIN_DMS = Math.round(MIN_DEPOSIT_BRL / PRICE_PER_DM); // 400
+const MIN_DEPOSIT_BRL = 50;
+const MIN_DMS = Math.round(MIN_DEPOSIT_BRL / PRICE_PER_DM); // 1000
 
 const dmsToBRL = (dms: number) => dms * PRICE_PER_DM;
 const brlToDms = (brl: number) => Math.floor(brl / PRICE_PER_DM);
@@ -33,17 +33,17 @@ const formatDMs = (n: number) => n.toLocaleString("pt-BR");
 
 const PACKAGES = [
   {
-    dms: 400, bonus: 0, priceBRL: 20, icon: Zap, label: "Starter",
+    dms: 1000, bonus: 0, priceBRL: 50, icon: Zap, label: "Starter",
     desc: "Ideal pra testar", popular: false,
     accent: "from-sky-500 to-cyan-400",
   },
   {
-    dms: 1000, bonus: 100, priceBRL: 50, icon: Rocket, label: "Pro",
+    dms: 2200, bonus: 200, priceBRL: 100, icon: Rocket, label: "Pro",
     desc: "O mais escolhido", popular: true,
     accent: "from-primary to-primary-glow",
   },
   {
-    dms: 4000, bonus: 600, priceBRL: 200, icon: Crown, label: "Business",
+    dms: 4500, bonus: 500, priceBRL: 200, icon: Crown, label: "Business",
     desc: "Pra campanhas grandes", popular: false,
     accent: "from-amber-400 to-orange-500",
   },
@@ -71,7 +71,7 @@ const Credits = () => {
   const [txs, setTxs] = useState<Tx[]>([]);
   const [buying, setBuying] = useState<string | null>(null);
   const [tab, setTab] = useState<"shop" | "history">("shop");
-  const [customBRL, setCustomBRL] = useState<string>("20");
+  const [customBRL, setCustomBRL] = useState<string>("50");
   const [deposit, setDeposit] = useState<DepositInfo | null>(null);
   const [paid, setPaid] = useState(false);
   const pollRef = useRef<number | null>(null);
@@ -204,7 +204,7 @@ const Credits = () => {
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <span className="px-2.5 py-1 rounded-lg bg-card border border-border font-bold">1 DM = R$ 0,05</span>
           <span className="px-2.5 py-1 rounded-lg bg-card border border-border font-bold">R$ 1 = 20 DMs</span>
-          <span className="px-2.5 py-1 rounded-lg bg-card border border-border font-bold">R$ 20 = 400 DMs</span>
+          <span className="px-2.5 py-1 rounded-lg bg-card border border-border font-bold">R$ 50 = 1.000 DMs</span>
           <span className="px-2.5 py-1 rounded-lg bg-card border border-border font-bold">R$ 100 = 2.000 DMs</span>
         </div>
       </div>
@@ -330,7 +330,7 @@ const Credits = () => {
                         value={customBRL}
                         onChange={(e) => setCustomBRL(e.target.value)}
                         className="pl-10 h-12 text-xl font-black tabular-nums"
-                        placeholder="20"
+                        placeholder="50"
                       />
                     </div>
                   </div>
@@ -361,7 +361,7 @@ const Credits = () => {
                 {/* Atalhos */}
                 <div className="flex flex-wrap gap-1.5 mt-3">
                   <span className="text-[10px] text-muted-foreground self-center mr-1">Atalhos:</span>
-                  {[20, 30, 50, 100, 150, 300].map((v) => (
+                  {[50, 80, 100, 150, 250, 500].map((v) => (
                     <button
                       key={v}
                       onClick={() => setCustomBRL(String(v))}
