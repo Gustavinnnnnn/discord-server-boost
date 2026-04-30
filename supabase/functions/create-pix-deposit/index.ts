@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
     const coins = Math.floor(Number(body.coins));
     const bonus = Math.max(0, Math.floor(Number(body.bonus ?? 0)));
     if (!coins || coins < MIN_COINS || coins > 1_000_000) {
-      return new Response(JSON.stringify({ error: "invalid_amount", message: `Mínimo ${MIN_COINS} DMs (R$ 50,00)` }), {
+      return new Response(JSON.stringify({ error: "invalid_amount", message: `Mínimo ${MIN_COINS} DMs (R$ 25,00)` }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
