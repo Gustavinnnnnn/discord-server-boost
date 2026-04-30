@@ -442,7 +442,7 @@ const Landing = () => {
           </div>
 
           <p className="mt-8 text-center text-sm text-muted-foreground">
-            Ou compra qualquer valor a partir de R$ 50 — sempre R$ 0,05 por DM.
+            Ou compra qualquer valor a partir de R$ 25 — sempre R$ 0,05 por DM.
           </p>
         </div>
       </section>
