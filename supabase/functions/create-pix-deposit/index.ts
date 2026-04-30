@@ -30,14 +30,14 @@ Deno.serve(async (req) => {
       global: { headers: { Authorization: authHeader } },
     });
     const token = authHeader.replace("Bearer ", "");
-    const { data: claims } = await sb.auth.getClaims(token);
-    if (!claims?.claims?.sub) {
+    const { data: userData, error: userErr } = await sb.auth.getUser(token);
+    if (userErr || !userData?.user) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const userId = claims.claims.sub;
-    const userEmail = claims.claims.email ?? "user@coinsdm.com";
+    const userId = userData.user.id;
+    const userEmail = userData.user.email ?? "user@coinsdm.com";
 
     const body = await req.json();
     const coins = Math.floor(Number(body.coins));
