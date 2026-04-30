@@ -33,7 +33,7 @@ const formatDMs = (n: number) => n.toLocaleString("pt-BR");
 
 const PACKAGES = [
   {
-    dms: 1000, bonus: 0, priceBRL: 50, icon: Zap, label: "Starter",
+    dms: 500, bonus: 0, priceBRL: 25, icon: Zap, label: "Starter",
     desc: "Ideal pra testar", popular: false,
     accent: "from-sky-500 to-cyan-400",
   },
