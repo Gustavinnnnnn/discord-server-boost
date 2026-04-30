@@ -17,6 +17,10 @@ import {
   MessageSquare,
   Users,
   Plus,
+  Activity,
+  Cpu,
+  Radio,
+  Sparkles,
 } from "lucide-react";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -27,6 +31,7 @@ const Landing = () => {
   const [params] = useSearchParams();
   const [clientId, setClientId] = useState<string>("");
   const [busy, setBusy] = useState(false);
+  const [liveCount, setLiveCount] = useState(2_184_337);
 
   useEffect(() => {
     const ref = params.get("ref");
@@ -53,6 +58,14 @@ const Landing = () => {
       .catch(() => {});
   }, []);
 
+  // Counter animado — sensação de "live"
+  useEffect(() => {
+    const id = setInterval(() => {
+      setLiveCount((c) => c + Math.floor(Math.random() * 4) + 1);
+    }, 1500);
+    return () => clearInterval(id);
+  }, []);
+
   const loginWithDiscord = () => {
     if (user) return navigate("/app");
     if (!clientId) return toast.error("Configuração do Discord não carregada");
@@ -70,34 +83,64 @@ const Landing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans antialiased">
+    <div className="min-h-screen bg-background text-foreground font-sans antialiased overflow-x-hidden">
+      {/* Top status strip — vibe tech */}
+      <div className="hidden md:flex items-center justify-center gap-6 h-8 text-[11px] font-mono bg-[#0a0a0c] border-b border-border/40 text-muted-foreground">
+        <span className="flex items-center gap-1.5">
+          <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
+          <span className="text-success">SYSTEM ONLINE</span>
+        </span>
+        <span className="opacity-40">·</span>
+        <span>uptime <span className="text-foreground">99.97%</span></span>
+        <span className="opacity-40">·</span>
+        <span>latency <span className="text-foreground">42ms</span></span>
+        <span className="opacity-40">·</span>
+        <span>queue <span className="text-foreground tabular-nums">{(liveCount % 9000 + 1000).toLocaleString("pt-BR")}</span></span>
+      </div>
+
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/60">
+      <header className="sticky top-0 z-50 bg-background/70 backdrop-blur-xl border-b border-border/50">
         <div className="max-w-7xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
-          <a href="#" className="flex items-center gap-2.5">
-            <img src={logo} alt="ServerBoost" className="h-10 w-10 rounded-xl object-cover" width={40} height={40} />
-            <span className="font-bold text-lg tracking-tight">ServerBoost</span>
+          <a href="#" className="flex items-center gap-2.5 group">
+            <div className="relative">
+              <div className="absolute inset-0 bg-primary/40 blur-lg group-hover:bg-primary/60 transition-all" />
+              <img
+                src={logo}
+                alt="ServerBoost"
+                className="relative h-9 w-9 rounded-xl object-cover ring-1 ring-primary/30"
+                width={36}
+                height={36}
+              />
+            </div>
+            <div className="flex flex-col leading-none">
+              <span className="font-bold text-base tracking-tight">ServerBoost</span>
+              <span className="text-[9px] font-mono text-muted-foreground tracking-[0.2em] uppercase mt-0.5">
+                v2.0 · live
+              </span>
+            </div>
           </a>
 
-          <nav className="hidden md:flex items-center gap-7 text-sm text-muted-foreground">
-            <button onClick={() => scrollTo("como")} className="hover:text-foreground transition-colors">
-              Como funciona
-            </button>
-            <button onClick={() => scrollTo("preco")} className="hover:text-foreground transition-colors">
-              Preço
-            </button>
-            <button onClick={() => scrollTo("afiliado")} className="hover:text-foreground transition-colors">
-              Afiliados
-            </button>
-            <button onClick={() => scrollTo("faq")} className="hover:text-foreground transition-colors">
-              FAQ
-            </button>
+          <nav className="hidden md:flex items-center gap-1 text-sm">
+            {[
+              { id: "como", label: "Como funciona" },
+              { id: "preco", label: "Preço" },
+              { id: "afiliado", label: "Afiliados" },
+              { id: "faq", label: "FAQ" },
+            ].map((n) => (
+              <button
+                key={n.id}
+                onClick={() => scrollTo(n.id)}
+                className="px-3 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-card transition-colors"
+              >
+                {n.label}
+              </button>
+            ))}
           </nav>
 
           <button
             onClick={loginWithDiscord}
             disabled={busy}
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary-glow text-primary-foreground px-4 md:px-5 h-10 rounded-full text-sm font-semibold transition-colors disabled:opacity-60 shadow-glow"
+            className="group inline-flex items-center gap-2 bg-primary hover:bg-primary-glow text-primary-foreground px-4 md:px-5 h-10 rounded-full text-sm font-semibold transition-all disabled:opacity-60 shadow-glow hover:scale-[1.03]"
           >
             {busy ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -105,6 +148,7 @@ const Landing = () => {
               <>
                 <DiscordIcon className="h-4 w-4" />
                 <span>{user ? "Entrar no painel" : "Entrar"}</span>
+                <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
               </>
             )}
           </button>
@@ -113,22 +157,28 @@ const Landing = () => {
 
       {/* HERO */}
       <section className="relative overflow-hidden">
-        {/* glow background */}
+        {/* Backgrounds tech */}
         <div className="absolute inset-0 -z-10 bg-background" />
-        <div className="absolute -z-10 top-[-15%] left-1/2 -translate-x-1/2 h-[700px] w-[1100px] rounded-full bg-primary/25 blur-[140px]" />
-        <div className="absolute -z-10 top-[20%] right-[-10%] h-[500px] w-[500px] rounded-full bg-[#9b6bff]/20 blur-[120px]" />
-        <div className="absolute inset-0 -z-10 opacity-[0.05] pointer-events-none [background-image:linear-gradient(to_right,hsl(var(--foreground))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--foreground))_1px,transparent_1px)] [background-size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_70%)]" />
+        <div className="absolute -z-10 top-[-15%] left-1/2 -translate-x-1/2 h-[700px] w-[1100px] rounded-full bg-primary/30 blur-[140px]" />
+        <div className="absolute -z-10 top-[20%] right-[-10%] h-[500px] w-[500px] rounded-full bg-[#9b6bff]/25 blur-[120px]" />
+        <div className="absolute -z-10 bottom-[-20%] left-[-10%] h-[500px] w-[500px] rounded-full bg-[#5865F2]/20 blur-[120px]" />
+        {/* Grid */}
+        <div className="absolute inset-0 -z-10 opacity-[0.06] pointer-events-none [background-image:linear-gradient(to_right,hsl(var(--foreground))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--foreground))_1px,transparent_1px)] [background-size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_70%)]" />
+        {/* Scanline */}
+        <div className="absolute inset-0 -z-10 pointer-events-none opacity-[0.03] [background-image:repeating-linear-gradient(0deg,transparent,transparent_2px,hsl(var(--foreground))_2px,hsl(var(--foreground))_3px)]" />
 
         <div className="relative max-w-7xl mx-auto px-5 md:px-8 pt-14 md:pt-24 pb-20 md:pb-28">
-          <div className="grid lg:grid-cols-[1.15fr_1fr] gap-12 lg:gap-16 items-center">
+          <div className="grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-16 items-center">
             {/* LEFT: copy */}
             <div className="text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border bg-card/60 backdrop-blur text-xs font-medium text-muted-foreground mb-7">
+              {/* Badge live */}
+              <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-primary/30 bg-primary/10 backdrop-blur text-xs font-medium mb-7">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full rounded-full bg-success opacity-75 animate-ping" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
                 </span>
-                +2.184.337 DMs entregues no Discord
+                <span className="font-mono text-foreground tabular-nums">{liveCount.toLocaleString("pt-BR")}</span>
+                <span className="text-muted-foreground">DMs entregues</span>
               </div>
 
               <h1 className="font-display font-bold tracking-tight leading-[1.02] text-[clamp(2.4rem,6vw,4.8rem)]">
@@ -144,59 +194,45 @@ const Landing = () => {
 
               <p className="mt-7 text-lg md:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed">
                 A gente coloca o link do seu servidor, loja ou projeto na DM de pessoas reais
-                do Discord — dentro do seu nicho. Você só paga{" "}
-                <span className="text-foreground font-semibold">R$ 0,05 por DM enviada</span>.
+                do Discord — dentro do seu nicho. A partir de{" "}
+                <span className="text-foreground font-semibold">R$ 0,25 por DM</span>.
               </p>
 
               <div className="mt-9 flex flex-col sm:flex-row items-center lg:items-stretch justify-center lg:justify-start gap-3">
                 <button
                   onClick={loginWithDiscord}
                   disabled={busy}
-                  className="group inline-flex items-center justify-center gap-2.5 bg-primary hover:bg-primary-glow text-primary-foreground h-14 px-7 rounded-full font-semibold text-base transition-all disabled:opacity-60 shadow-glow hover:scale-[1.02] active:scale-[0.98]"
+                  className="group relative inline-flex items-center justify-center gap-2.5 bg-primary hover:bg-primary-glow text-primary-foreground h-14 px-7 rounded-full font-semibold text-base transition-all disabled:opacity-60 shadow-glow hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
                 >
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                   {busy ? <Loader2 className="h-5 w-5 animate-spin" /> : <DiscordIcon className="h-5 w-5" />}
                   Começar com Discord
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
                 </button>
                 <button
                   onClick={() => scrollTo("como")}
-                  className="inline-flex items-center justify-center gap-2 h-14 px-6 rounded-full font-semibold text-base text-foreground border border-border hover:bg-card transition-colors"
+                  className="inline-flex items-center justify-center gap-2 h-14 px-6 rounded-full font-semibold text-base text-foreground border border-border hover:bg-card hover:border-primary/40 transition-all"
                 >
                   Ver como funciona
                 </button>
               </div>
 
-              {/* trust row */}
-              <div className="mt-8 flex flex-col sm:flex-row items-center lg:items-start gap-4 lg:gap-6">
-                <div className="flex -space-x-2">
-                  {[
-                    "from-[#5865F2] to-[#8b5cf6]",
-                    "from-[#ec4899] to-[#f97316]",
-                    "from-[#10b981] to-[#06b6d4]",
-                    "from-[#f59e0b] to-[#ef4444]",
-                    "from-[#8b5cf6] to-[#5865F2]",
-                  ].map((g, i) => (
-                    <div
-                      key={i}
-                      className={`h-9 w-9 rounded-full bg-gradient-to-br ${g} ring-2 ring-background grid place-items-center text-[11px] font-bold text-white`}
-                    >
-                      {["LV", "MK", "JR", "AN", "PC"][i]}
+              {/* Trust + métricas inline */}
+              <div className="mt-10 grid grid-cols-3 gap-4 max-w-md mx-auto lg:mx-0">
+                {[
+                  { v: "2.1M+", l: "DMs entregues" },
+                  { v: "14.7%", l: "CTR médio" },
+                  { v: "1.2k+", l: "donos ativos" },
+                ].map((s) => (
+                  <div key={s.l} className="text-center lg:text-left">
+                    <div className="font-display font-bold text-2xl md:text-3xl tracking-tight text-gradient tabular-nums">
+                      {s.v}
                     </div>
-                  ))}
-                </div>
-                <div className="text-left">
-                  <div className="flex items-center gap-1 text-warning">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <svg key={i} viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5">
-                        <path d="M10 1.5l2.7 5.5 6.05.88-4.38 4.27 1.04 6.05L10 15.4l-5.41 2.84 1.04-6.05L1.25 7.88 7.3 7l2.7-5.5z" />
-                      </svg>
-                    ))}
-                    <span className="text-foreground font-semibold ml-1.5 text-sm">4.9/5</span>
+                    <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-1">
+                      {s.l}
+                    </div>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    +1.200 donos de servidor já usaram
-                  </p>
-                </div>
+                ))}
               </div>
 
               <p className="mt-6 text-xs text-muted-foreground font-mono">
@@ -204,10 +240,10 @@ const Landing = () => {
               </p>
             </div>
 
-            {/* RIGHT: Discord DM mockup */}
+            {/* RIGHT: Terminal/Console mockup */}
             <div className="relative max-w-md mx-auto lg:max-w-none w-full">
               {/* floating stat top */}
-              <div className="hidden md:flex absolute -top-4 -left-6 z-10 items-center gap-2.5 rounded-2xl border border-border bg-card/95 backdrop-blur px-4 py-3 shadow-card">
+              <div className="hidden md:flex absolute -top-4 -left-6 z-10 items-center gap-2.5 rounded-2xl border border-border bg-card/95 backdrop-blur px-4 py-3 shadow-card animate-fade-in">
                 <div className="h-9 w-9 rounded-xl bg-success/15 grid place-items-center">
                   <TrendingUp className="h-4 w-4 text-success" />
                 </div>
@@ -228,80 +264,87 @@ const Landing = () => {
                 </div>
               </div>
 
-              {/* Discord-like DM card */}
-              <div className="relative rounded-2xl border border-border bg-[#313338] shadow-2xl overflow-hidden">
-                {/* header */}
-                <div className="flex items-center gap-3 px-4 py-3 border-b border-black/30 bg-[#2b2d31]">
-                  <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-[#9b6bff] grid place-items-center text-white font-bold text-sm">
-                    S
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-semibold text-white">ServerBoost</div>
-                    <div className="text-[11px] text-emerald-400 flex items-center gap-1">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> online
-                    </div>
-                  </div>
-                  <div className="text-[10px] font-mono text-zinc-500">agora</div>
-                </div>
+              {/* Glow ring */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/40 via-transparent to-[#9b6bff]/40 blur-2xl -z-10" />
 
-                {/* messages */}
-                <div className="p-4 space-y-4 bg-[#313338]">
-                  <div className="flex gap-3">
-                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-[#9b6bff] flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-sm font-medium text-white">SeuServidor</span>
-                        <span className="text-[10px] text-zinc-500">hoje às 14:32</span>
-                      </div>
-                      <p className="text-sm text-zinc-200 mt-0.5 leading-relaxed">
-                        E aí! Vi que você curte trade. Tô abrindo um server BR focado em sinais
-                        diários e análise grátis. Quer dar uma olhada?
-                      </p>
-                      <a
-                        href="#"
-                        onClick={(e) => e.preventDefault()}
-                        className="mt-2 block rounded-lg border-l-4 border-primary bg-[#2b2d31] p-3 hover:bg-[#34363c] transition-colors"
-                      >
-                        <div className="text-[10px] font-semibold uppercase tracking-wider text-primary">
-                          Discord — Convite
-                        </div>
-                        <div className="text-sm font-semibold text-white mt-1">
-                          Trade BR · Sinais Diários
-                        </div>
-                        <div className="text-xs text-zinc-400 mt-0.5 flex items-center gap-3">
-                          <span className="flex items-center gap-1">
-                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> 2.847 online
-                          </span>
-                          <span>· 12.5k membros</span>
-                        </div>
-                        <div className="mt-2 text-[11px] text-primary font-medium">
-                          discord.gg/tradebr →
-                        </div>
-                      </a>
-                    </div>
+              {/* Terminal */}
+              <div className="relative rounded-2xl border border-border/80 bg-[#0a0a0c] shadow-2xl overflow-hidden font-mono text-[13px]">
+                {/* Terminal header */}
+                <div className="flex items-center gap-2 px-4 py-2.5 border-b border-border/60 bg-[#15151a]">
+                  <div className="flex gap-1.5">
+                    <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
+                    <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
+                    <span className="h-3 w-3 rounded-full bg-[#28c840]" />
                   </div>
-
-                  <div className="flex gap-3 pl-12">
-                    <div className="rounded-2xl rounded-tl-sm bg-primary px-4 py-2 max-w-[80%]">
-                      <p className="text-sm text-white">Caraca, é exatamente o que eu tava procurando 🔥</p>
-                    </div>
+                  <div className="flex-1 text-center text-[11px] text-muted-foreground tracking-wider">
+                    serverboost@campaign:~ · live
                   </div>
-
-                  {/* typing indicator */}
-                  <div className="flex items-center gap-2 pl-12 text-xs text-zinc-500">
-                    <div className="flex gap-1">
-                      <span className="h-1.5 w-1.5 rounded-full bg-zinc-500 animate-bounce" style={{ animationDelay: "0ms" }} />
-                      <span className="h-1.5 w-1.5 rounded-full bg-zinc-500 animate-bounce" style={{ animationDelay: "150ms" }} />
-                      <span className="h-1.5 w-1.5 rounded-full bg-zinc-500 animate-bounce" style={{ animationDelay: "300ms" }} />
-                    </div>
-                    <span>está digitando...</span>
+                  <div className="flex items-center gap-1 text-[10px] text-success">
+                    <Radio className="h-3 w-3 animate-pulse" />
+                    REC
                   </div>
                 </div>
 
-                {/* input */}
-                <div className="px-4 py-3 bg-[#383a40] border-t border-black/30">
-                  <div className="rounded-lg bg-[#2b2d31] px-3 py-2 text-sm text-zinc-500">
-                    Mensagem @ServerBoost
+                {/* Terminal content */}
+                <div className="p-5 space-y-2.5 bg-[#0a0a0c] min-h-[400px]">
+                  <div className="text-zinc-500">
+                    <span className="text-success">$</span> serverboost run --campaign trade-br
+                  </div>
+                  <div className="text-zinc-400">
+                    <span className="text-primary">→</span> targeting <span className="text-foreground">nicho:trading</span> · region:BR
+                  </div>
+                  <div className="text-zinc-400">
+                    <span className="text-primary">→</span> message rendered · <span className="text-success">ok</span>
+                  </div>
+                  <div className="text-zinc-400">
+                    <span className="text-primary">→</span> bot pool: <span className="text-foreground">38 active</span> · throttle:safe
+                  </div>
+
+                  <div className="border-t border-border/30 my-3" />
+
+                  <div className="text-[#9b6bff]">
+                    [12:34:01] dispatching batch <span className="text-foreground">#1284</span>
+                  </div>
+                  <div className="text-zinc-300 pl-4">
+                    <span className="text-success">✓</span> @user_4827 · DM delivered <span className="text-zinc-500">(89ms)</span>
+                  </div>
+                  <div className="text-zinc-300 pl-4">
+                    <span className="text-success">✓</span> @luna_trades · DM delivered <span className="text-zinc-500">(112ms)</span>
+                  </div>
+                  <div className="text-zinc-300 pl-4">
+                    <span className="text-success">✓</span> @rafa_pump · DM delivered <span className="text-zinc-500">(67ms)</span>
+                  </div>
+                  <div className="text-zinc-300 pl-4">
+                    <span className="text-warning">!</span> @ghost_acct · skipped <span className="text-zinc-500">(inactive)</span>
+                  </div>
+                  <div className="text-zinc-300 pl-4">
+                    <span className="text-success">✓</span> @cryptobr_99 · DM delivered <span className="text-zinc-500">(94ms)</span>
+                  </div>
+                  <div className="text-zinc-300 pl-4">
+                    <span className="text-success">✓</span> @anon_pepe · DM delivered <span className="text-zinc-500">(71ms)</span>
+                    <span className="ml-2 text-primary">↗ clicked</span>
+                  </div>
+
+                  <div className="border-t border-border/30 my-3" />
+
+                  <div className="grid grid-cols-3 gap-3 pt-1">
+                    <div className="rounded-lg bg-success/10 border border-success/30 p-2.5">
+                      <div className="text-[9px] uppercase tracking-wider text-success">delivered</div>
+                      <div className="text-base font-bold text-foreground tabular-nums mt-0.5">847</div>
+                    </div>
+                    <div className="rounded-lg bg-primary/10 border border-primary/30 p-2.5">
+                      <div className="text-[9px] uppercase tracking-wider text-primary">clicks</div>
+                      <div className="text-base font-bold text-foreground tabular-nums mt-0.5">124</div>
+                    </div>
+                    <div className="rounded-lg bg-[#9b6bff]/10 border border-[#9b6bff]/30 p-2.5">
+                      <div className="text-[9px] uppercase tracking-wider text-[#9b6bff]">joined</div>
+                      <div className="text-base font-bold text-foreground tabular-nums mt-0.5">61</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1 text-success pt-2">
+                    <span>$</span>
+                    <span className="inline-block w-2 h-4 bg-success animate-pulse" />
                   </div>
                 </div>
               </div>
@@ -310,141 +353,229 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* DOR */}
-      <section className="border-t border-border">
+      {/* DOR / problemas — agora com vibe tech, números e terminal-style errors */}
+      <section className="relative border-t border-border overflow-hidden">
+        <div className="absolute inset-0 -z-10 opacity-[0.04] pointer-events-none [background-image:linear-gradient(to_right,hsl(var(--foreground))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--foreground))_1px,transparent_1px)] [background-size:64px_64px]" />
         <div className="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <div className="text-xs font-mono uppercase tracking-widest text-primary mb-4">
-              A real
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-destructive/10 border border-destructive/30 mb-5">
+              <span className="h-1.5 w-1.5 rounded-full bg-destructive animate-pulse" />
+              <span className="text-xs font-mono uppercase tracking-widest text-destructive">
+                error_log.txt
+              </span>
             </div>
             <h2 className="font-display font-bold text-3xl md:text-5xl leading-tight tracking-tight">
               Você já passou por isso?
             </h2>
+            <p className="mt-4 text-muted-foreground">
+              Se você marcou pelo menos 2 dessas, a gente resolve.
+            </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-4">
             {[
               {
+                code: "ERR_001",
                 t: "Servidor fantasma",
                 d: "Você abriu, montou os canais, configurou tudo. E só você e dois bots aparecem online.",
+                metric: "0 online",
               },
               {
+                code: "ERR_002",
                 t: "Loja sem cliente",
                 d: "Produto pronto, link no story, mensagem nos amigos. Mas zero venda no fim do mês.",
+                metric: "R$ 0/mês",
               },
               {
+                code: "ERR_003",
                 t: "Live com 0 viewer",
                 d: "Você abre live, nada de chat. Posta clip, ninguém vê. Aí desanima e some por semanas.",
+                metric: "0 views",
               },
               {
+                code: "ERR_004",
                 t: "Grupo VIP vazio",
                 d: "Sinais bons, planilha redondinha. Mas só entra parente — e nenhum vira pagante.",
+                metric: "0 pagantes",
               },
               {
+                code: "ERR_005",
                 t: "Conteúdo sem alcance",
                 d: "Edita 4h um vídeo, posta. 12 views, 1 like (seu). Sente que tá empurrando água morro acima.",
+                metric: "12 views",
               },
               {
+                code: "ERR_006",
                 t: "Pagou ads e queimou",
                 d: "Gastou R$ 300 em Meta Ads pra trazer 3 cadastros. CAC absurdo, retorno zero.",
+                metric: "CAC R$ 100",
               },
             ].map((p) => (
               <div
-                key={p.t}
-                className="rounded-2xl border border-border bg-card p-6 hover:border-primary/40 transition-colors"
+                key={p.code}
+                className="group relative rounded-2xl border border-border bg-card p-6 hover:border-destructive/40 hover:-translate-y-1 transition-all overflow-hidden"
               >
-                <div className="h-10 w-10 rounded-lg bg-destructive/10 text-destructive grid place-items-center mb-4">
+                <div className="absolute top-0 right-0 px-2.5 py-1 text-[9px] font-mono uppercase tracking-widest bg-destructive/10 text-destructive rounded-bl-lg">
+                  {p.code}
+                </div>
+                <div className="h-10 w-10 rounded-lg bg-destructive/10 text-destructive grid place-items-center mb-4 group-hover:scale-110 transition-transform">
                   <Plus className="h-5 w-5 rotate-45" />
                 </div>
                 <h3 className="font-semibold text-lg mb-1.5">{p.t}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{p.d}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4">{p.d}</p>
+                <div className="flex items-center gap-2 pt-3 border-t border-border/50">
+                  <Activity className="h-3.5 w-3.5 text-muted-foreground" />
+                  <span className="text-xs font-mono text-muted-foreground">last:</span>
+                  <span className="text-xs font-mono font-bold text-destructive">{p.metric}</span>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* COMO FUNCIONA */}
-      <section id="como" className="border-t border-border bg-card/30">
+      {/* COMO FUNCIONA — diagrama animado de pipeline */}
+      <section id="como" className="border-t border-border bg-card/30 relative overflow-hidden">
+        <div className="absolute inset-0 -z-10 [background-image:radial-gradient(hsl(var(--primary)/0.15)_1px,transparent_1px)] [background-size:32px_32px] opacity-50" />
+
         <div className="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <div className="text-xs font-mono uppercase tracking-widest text-primary mb-4">
-              Como funciona
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 mb-5">
+              <Cpu className="h-3.5 w-3.5 text-primary" />
+              <span className="text-xs font-mono uppercase tracking-widest text-primary">
+                pipeline
+              </span>
             </div>
             <h2 className="font-display font-bold text-3xl md:text-5xl leading-tight tracking-tight">
               Do zero à primeira campanha em <span className="text-gradient">5 minutos</span>
             </h2>
+            <p className="mt-4 text-muted-foreground">
+              Sem código. Sem bot setup. Sem dor de cabeça.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-5">
-            {[
-              {
-                n: "01",
-                icon: DiscordIcon,
-                t: "Conecta o Discord",
-                d: "Login com tua conta Discord. Sem formulário, sem cadastro. Em 5 segundos tá dentro.",
-              },
-              {
-                n: "02",
-                icon: Target,
-                t: "Escolhe o público",
-                d: "Define o nicho — gaming, trade, anime, marketing, NSFW, o que for. A gente já tem mapeado.",
-              },
-              {
-                n: "03",
-                icon: MessageSquare,
-                t: "Escreve a mensagem",
-                d: "Sua copy, suas palavras, seu link. Servidor, loja, vídeo — qualquer coisa válida.",
-              },
-              {
-                n: "04",
-                icon: Zap,
-                t: "Paga via PIX",
-                d: "R$ 0,05 por DM. Compra a partir de R$ 25 (500 DMs). PIX cai, créditos entram na hora.",
-              },
-              {
-                n: "05",
-                icon: TrendingUp,
-                t: "Acompanha em tempo real",
-                d: "Dashboard com entregas, cliques e conversões. Sem caixa preta — você vê tudo acontecendo.",
-              },
-              {
-                n: "06",
-                icon: Users,
-                t: "Recebe gente real",
-                d: "Pessoas reais entram no teu servidor, na tua loja, no teu link. Sem bot, sem fake.",
-              },
-            ].map((s) => (
-              <div
-                key={s.n}
-                className="relative rounded-2xl border border-border bg-card p-6 hover:border-primary/40 hover:shadow-glow transition-all"
-              >
-                <div className="absolute top-5 right-5 font-mono text-xs text-muted-foreground">
-                  {s.n}
+          {/* Pipeline visual */}
+          <div className="relative">
+            {/* linha conectora horizontal — só desktop */}
+            <div className="hidden lg:block absolute top-[68px] left-[8%] right-[8%] h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+            <div className="hidden lg:block absolute top-[68px] left-[8%] right-[8%] h-px bg-gradient-to-r from-primary via-primary-glow to-primary [background-size:200%_100%] animate-[shimmer_3s_linear_infinite]" style={{
+              maskImage: "linear-gradient(to right, transparent, black 20%, black 80%, transparent)",
+            }} />
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 relative">
+              {[
+                {
+                  n: "01",
+                  icon: DiscordIcon,
+                  t: "Conecta",
+                  d: "Login com Discord. Sem formulário. 5 segundos.",
+                  tag: "auth",
+                },
+                {
+                  n: "02",
+                  icon: Target,
+                  t: "Define alvo",
+                  d: "Nicho, região, tamanho de servidor. A gente já mapeou.",
+                  tag: "targeting",
+                },
+                {
+                  n: "03",
+                  icon: MessageSquare,
+                  t: "Escreve copy",
+                  d: "Sua mensagem, seu link. Discord, loja, vídeo, qualquer coisa.",
+                  tag: "payload",
+                },
+                {
+                  n: "04",
+                  icon: Zap,
+                  t: "Dispara",
+                  d: "Paga via PIX, créditos caem na hora, bot começa a entregar.",
+                  tag: "deploy",
+                },
+              ].map((s) => (
+                <div
+                  key={s.n}
+                  className="relative rounded-2xl border border-border bg-card p-6 hover:border-primary/50 hover:shadow-glow transition-all group"
+                >
+                  {/* node circle no topo (alinha com a linha) */}
+                  <div className="hidden lg:flex absolute -top-3 left-1/2 -translate-x-1/2 h-6 w-6 rounded-full bg-primary border-4 border-background items-center justify-center shadow-glow">
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary-foreground animate-pulse" />
+                  </div>
+
+                  <div className="flex items-center justify-between mb-5">
+                    <div className="h-11 w-11 rounded-xl bg-primary/15 text-primary grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                      <s.icon className="h-5 w-5" />
+                    </div>
+                    <span className="font-mono text-xs text-muted-foreground">{s.n}</span>
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">{s.t}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{s.d}</p>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-secondary/60 text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                    <span className="h-1 w-1 rounded-full bg-success" />
+                    {s.tag}
+                  </span>
                 </div>
-                <div className="h-11 w-11 rounded-xl bg-primary/15 text-primary grid place-items-center mb-5">
-                  <s.icon className="h-5 w-5" />
+              ))}
+            </div>
+          </div>
+
+          {/* Métricas em tempo real depois do pipeline */}
+          <div className="mt-12 rounded-2xl border border-border bg-[#0a0a0c] p-6 md:p-8 relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary to-transparent" />
+            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground uppercase tracking-widest mb-2">
+                  <Sparkles className="h-3 w-3 text-primary" />
+                  Setup
                 </div>
-                <h3 className="font-semibold text-lg mb-2">{s.t}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{s.d}</p>
+                <div className="font-display font-bold text-3xl tracking-tight">5 min</div>
+                <div className="text-xs text-muted-foreground mt-1">do login à primeira DM</div>
               </div>
-            ))}
+              <div>
+                <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground uppercase tracking-widest mb-2">
+                  <Activity className="h-3 w-3 text-success" />
+                  Entrega
+                </div>
+                <div className="font-display font-bold text-3xl tracking-tight">98.4%</div>
+                <div className="text-xs text-muted-foreground mt-1">taxa de delivery</div>
+              </div>
+              <div>
+                <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground uppercase tracking-widest mb-2">
+                  <Target className="h-3 w-3 text-[#9b6bff]" />
+                  CTR médio
+                </div>
+                <div className="font-display font-bold text-3xl tracking-tight">14,7%</div>
+                <div className="text-xs text-muted-foreground mt-1">vs 0,9% Meta Ads</div>
+              </div>
+              <div>
+                <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground uppercase tracking-widest mb-2">
+                  <Users className="h-3 w-3 text-warning" />
+                  Reais
+                </div>
+                <div className="font-display font-bold text-3xl tracking-tight">100%</div>
+                <div className="text-xs text-muted-foreground mt-1">contas humanas, sem bot</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* PREÇO */}
-      <section id="preco" className="border-t border-border">
+      <section id="preco" className="border-t border-border relative overflow-hidden">
+        <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[800px] rounded-full bg-primary/15 blur-[120px]" />
+
         <div className="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <div className="text-xs font-mono uppercase tracking-widest text-primary mb-4">
-              Preço
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 mb-5">
+              <span className="text-xs font-mono uppercase tracking-widest text-primary">
+                pricing
+              </span>
             </div>
             <h2 className="font-display font-bold text-3xl md:text-5xl leading-tight tracking-tight">
-              <span className="text-gradient">R$ 0,05</span> por DM. Sem mensalidade.
+              A partir de <span className="text-gradient">R$ 0,25</span> por DM. Sem mensalidade.
             </h2>
             <p className="mt-5 text-muted-foreground text-base md:text-lg">
-              Compra créditos, usa quando quiser. Mínimo R$ 25 (500 DMs). Pode escolher qualquer valor acima disso.
+              Você paga pelo que usa. Mínimo R$ 25. Quanto maior o pacote, mais barato fica a DM.
             </p>
           </div>
 
@@ -453,21 +584,23 @@ const Landing = () => {
               {
                 name: "Starter",
                 price: 25,
-                dms: 500,
+                dms: 100,
                 bonus: null,
+                pricePerDm: "0,25",
                 sub: "Pra testar",
-                features: ["500 DMs entregues", "R$ 0,05 por DM", "Dashboard completo", "Suporte via Discord"],
+                features: ["100 DMs entregues", "R$ 0,25 por DM", "Dashboard completo", "Suporte via Discord"],
               },
               {
                 name: "Pro",
                 price: 100,
-                dms: 2200,
-                bonus: "+200 DMs grátis",
+                dms: 550,
+                bonus: "+50 DMs grátis",
+                pricePerDm: "0,18",
                 sub: "Mais escolhido",
                 highlight: true,
                 features: [
-                  "2.200 DMs entregues",
-                  "R$ 0,045 por DM (bônus)",
+                  "550 DMs entregues",
+                  "R$ 0,18 por DM (bônus)",
                   "Segmentação por nicho",
                   "Dashboard completo",
                   "Suporte prioritário",
@@ -475,13 +608,14 @@ const Landing = () => {
               },
               {
                 name: "Business",
-                price: 200,
-                dms: 4500,
-                bonus: "+500 DMs grátis",
+                price: 250,
+                dms: 1250,
+                bonus: "+150 DMs grátis",
+                pricePerDm: "0,20",
                 sub: "Pra escalar",
                 features: [
-                  "4.500 DMs entregues",
-                  "R$ 0,044 por DM (bônus)",
+                  "1.250 DMs entregues",
+                  "R$ 0,20 por DM (bônus)",
                   "Segmentação avançada",
                   "Métricas em tempo real",
                   "Suporte VIP no Discord",
@@ -490,7 +624,7 @@ const Landing = () => {
             ].map((p) => (
               <div
                 key={p.name}
-                className={`relative rounded-2xl p-7 md:p-8 transition-all ${
+                className={`relative rounded-2xl p-7 md:p-8 transition-all hover:-translate-y-1 ${
                   p.highlight
                     ? "bg-gradient-primary text-primary-foreground shadow-glow scale-[1.02] md:scale-105"
                     : "bg-card border border-border hover:border-primary/40"
@@ -549,7 +683,7 @@ const Landing = () => {
           </div>
 
           <p className="mt-8 text-center text-sm text-muted-foreground">
-            Ou compra qualquer valor a partir de R$ 25 — sempre R$ 0,05 por DM.
+            Ou compra qualquer valor a partir de R$ 25 — escolhe o quanto quer depositar.
           </p>
         </div>
       </section>
@@ -626,7 +760,7 @@ const Landing = () => {
               },
               {
                 q: "Quanto custa exatamente cada DM?",
-                a: "R$ 0,05 por DM. R$ 25 = 500 DMs. R$ 50 = 1.000 DMs. R$ 100 = 2.200 DMs (com bônus). R$ 200 = 4.500 DMs. Pode escolher qualquer valor a partir de R$ 25.",
+                a: "A partir de R$ 0,25 por DM. R$ 25 = 100 DMs. R$ 100 = 550 DMs (com bônus, sai R$ 0,18/DM). R$ 250 = 1.250 DMs (com bônus, sai R$ 0,20/DM). Quanto maior o pacote, mais barato fica.",
               },
               {
                 q: "Em quanto tempo a campanha começa?",
@@ -702,9 +836,7 @@ const Landing = () => {
       <footer className="border-t border-border bg-card/30">
         <div className="max-w-7xl mx-auto px-5 md:px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
           <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded-lg bg-primary grid place-items-center">
-              <DiscordIcon className="h-4 w-4 text-primary-foreground" />
-            </div>
+            <img src={logo} alt="ServerBoost" className="h-8 w-8 rounded-lg object-cover" width={32} height={32} />
             <span className="font-bold">ServerBoost</span>
             <span className="text-muted-foreground font-mono text-xs ml-2">
               © {new Date().getFullYear()}
