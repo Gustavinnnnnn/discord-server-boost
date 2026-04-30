@@ -29,12 +29,24 @@ const AuthCallback = () => {
         return;
       }
 
-      const { error } = await supabase.auth.setSession({ access_token, refresh_token });
+      const { data: sessionData, error } = await supabase.auth.setSession({ access_token, refresh_token });
       if (error) {
         toast.error("Erro ao iniciar sessão");
         navigate("/auth", { replace: true });
         return;
       }
+
+      // Vincula afiliado se houver código guardado
+      try {
+        const ref = localStorage.getItem("aff_ref");
+        if (ref && sessionData.session) {
+          await supabase.functions.invoke("track-referral", {
+            body: { code: ref, action: "signup" },
+          });
+          localStorage.removeItem("aff_ref");
+        }
+      } catch (e) { console.warn("affiliate link error", e); }
+
       toast.success("Conectado com Discord!");
       navigate("/app", { replace: true });
     };

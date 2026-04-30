@@ -14,6 +14,224 @@ export type Database = {
   }
   public: {
     Tables: {
+      affiliate_clicks: {
+        Row: {
+          affiliate_id: string
+          created_at: string
+          id: string
+          ip_hash: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          affiliate_id: string
+          created_at?: string
+          id?: string
+          ip_hash?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          affiliate_id?: string
+          created_at?: string
+          id?: string
+          ip_hash?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_clicks_affiliate_id_fkey"
+            columns: ["affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      affiliate_commissions: {
+        Row: {
+          affiliate_id: string
+          affiliate_user_id: string
+          commission_cents: number
+          created_at: string
+          deposit_amount_cents: number
+          deposit_id: string | null
+          id: string
+          rate: number
+          referred_user_id: string
+          status: string
+        }
+        Insert: {
+          affiliate_id: string
+          affiliate_user_id: string
+          commission_cents: number
+          created_at?: string
+          deposit_amount_cents: number
+          deposit_id?: string | null
+          id?: string
+          rate: number
+          referred_user_id: string
+          status?: string
+        }
+        Update: {
+          affiliate_id?: string
+          affiliate_user_id?: string
+          commission_cents?: number
+          created_at?: string
+          deposit_amount_cents?: number
+          deposit_id?: string | null
+          id?: string
+          rate?: number
+          referred_user_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_commissions_affiliate_id_fkey"
+            columns: ["affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      affiliate_referrals: {
+        Row: {
+          affiliate_id: string
+          affiliate_user_id: string
+          created_at: string
+          id: string
+          referred_user_id: string
+          source: string | null
+          total_commission_cents: number
+          total_spent_cents: number
+        }
+        Insert: {
+          affiliate_id: string
+          affiliate_user_id: string
+          created_at?: string
+          id?: string
+          referred_user_id: string
+          source?: string | null
+          total_commission_cents?: number
+          total_spent_cents?: number
+        }
+        Update: {
+          affiliate_id?: string
+          affiliate_user_id?: string
+          created_at?: string
+          id?: string
+          referred_user_id?: string
+          source?: string | null
+          total_commission_cents?: number
+          total_spent_cents?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_referrals_affiliate_id_fkey"
+            columns: ["affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      affiliate_withdrawals: {
+        Row: {
+          affiliate_id: string
+          affiliate_user_id: string
+          amount_cents: number
+          created_at: string
+          id: string
+          notes: string | null
+          paid_at: string | null
+          pix_key: string
+          pix_key_type: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          affiliate_id: string
+          affiliate_user_id: string
+          amount_cents: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          paid_at?: string | null
+          pix_key: string
+          pix_key_type: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          affiliate_id?: string
+          affiliate_user_id?: string
+          amount_cents?: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          paid_at?: string | null
+          pix_key?: string
+          pix_key_type?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_withdrawals_affiliate_id_fkey"
+            columns: ["affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      affiliates: {
+        Row: {
+          available_cents: number
+          code: string
+          commission_rate: number
+          created_at: string
+          id: string
+          pix_key: string | null
+          pix_key_type: string | null
+          total_clicks: number
+          total_earned_cents: number
+          total_paid_cents: number
+          total_referrals: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          available_cents?: number
+          code: string
+          commission_rate?: number
+          created_at?: string
+          id?: string
+          pix_key?: string | null
+          pix_key_type?: string | null
+          total_clicks?: number
+          total_earned_cents?: number
+          total_paid_cents?: number
+          total_referrals?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          available_cents?: number
+          code?: string
+          commission_rate?: number
+          created_at?: string
+          id?: string
+          pix_key?: string | null
+          pix_key_type?: string | null
+          total_clicks?: number
+          total_earned_cents?: number
+          total_paid_cents?: number
+          total_referrals?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       campaign_deliveries: {
         Row: {
           campaign_id: string
@@ -332,7 +550,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_affiliate_code: { Args: never; Returns: string }
     }
     Enums: {
       [_ in never]: never

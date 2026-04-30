@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { creditAffiliateCommission } from "../_shared/affiliate-commission.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -67,9 +68,20 @@ Deno.serve(async (req) => {
         user_id: deposit.user_id,
         amount: deposit.coins,
         type: "purchase",
-        description: `Depósito PIX confirmado · ${deposit.coins.toLocaleString("pt-BR")} coins (R$ ${(deposit.amount_cents / 100).toFixed(2)})`,
+        description: `Depósito PIX confirmado · ${deposit.coins.toLocaleString("pt-BR")} DMs (R$ ${(deposit.amount_cents / 100).toFixed(2)})`,
         balance_after: newBalance,
       });
+
+      // Credita comissão de afiliado (vitalício, 20%)
+      try {
+        await creditAffiliateCommission(admin, {
+          depositId: deposit.id,
+          referredUserId: deposit.user_id,
+          depositAmountCents: deposit.amount_cents,
+        });
+      } catch (e) {
+        console.error("affiliate commission error:", e);
+      }
     }
 
     return new Response(JSON.stringify({ ok: true }), {

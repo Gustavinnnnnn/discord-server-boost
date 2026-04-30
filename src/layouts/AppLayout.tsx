@@ -1,15 +1,17 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import { LayoutDashboard, Megaphone, LogOut, Plus, Coins } from "lucide-react";
-import { formatCoins } from "@/lib/ads";
+import { LayoutDashboard, Megaphone, LogOut, Plus, MessageCircle, Gift } from "lucide-react";
 import { DiscordIcon } from "@/components/DiscordIcon";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/useProfile";
 import { Button } from "@/components/ui/button";
 
+const formatDMs = (n: number) => n.toLocaleString("pt-BR");
+
 const nav = [
   { to: "/app", label: "Dashboard", icon: LayoutDashboard, end: true },
   { to: "/app/campanhas", label: "Campanhas", icon: Megaphone, end: false },
-  { to: "/app/creditos", label: "Coins", icon: Coins, end: false },
+  { to: "/app/creditos", label: "DMs", icon: MessageCircle, end: false },
+  { to: "/app/afiliados", label: "Afiliados", icon: Gift, end: false },
 ];
 
 const AppLayout = () => {
@@ -51,9 +53,9 @@ const AppLayout = () => {
 
         <div className="p-3 border-t border-border space-y-2">
           <Link to="/app/creditos" className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-primary/15 to-primary-glow/15 hover:from-primary/25 hover:to-primary-glow/25 transition">
-            <Coins className="h-4 w-4 text-primary" />
-            <span className="text-xs text-muted-foreground">Saldo</span>
-            <span className="ml-auto font-bold text-sm">{formatCoins(profile?.credits ?? 0)}</span>
+            <MessageCircle className="h-4 w-4 text-primary" />
+            <span className="text-xs text-muted-foreground">DMs</span>
+            <span className="ml-auto font-bold text-sm">{formatDMs(profile?.credits ?? 0)}</span>
           </Link>
           <div className="flex items-center gap-2.5 px-2 py-2">
             {profile?.avatar_url ? (
@@ -81,8 +83,8 @@ const AppLayout = () => {
         </Link>
         <div className="flex items-center gap-2">
           <Link to="/app/creditos" className="flex items-center gap-1 px-2 py-1 rounded bg-primary/15">
-            <Coins className="h-3.5 w-3.5 text-primary" />
-            <span className="text-xs font-bold">{formatCoins(profile?.credits ?? 0)}</span>
+            <MessageCircle className="h-3.5 w-3.5 text-primary" />
+            <span className="text-xs font-bold">{formatDMs(profile?.credits ?? 0)}</span>
           </Link>
           <Button size="icon" variant="ghost" onClick={logout}><LogOut className="h-4 w-4" /></Button>
         </div>
