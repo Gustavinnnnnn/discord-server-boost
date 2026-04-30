@@ -5,10 +5,13 @@ import { useAuth } from "@/hooks/useAuth";
 import { useProfile } from "@/hooks/useProfile";
 import { Button } from "@/components/ui/button";
 import {
-  Coins, Megaphone, Send, MousePointerClick, Plus, Users, Ban, MailX,
+  MessageCircle, Megaphone, Send, MousePointerClick, Plus, Users, Ban, MailX,
   UserX, AlertTriangle, TrendingUp, Sparkles, ArrowUpRight, Zap,
 } from "lucide-react";
-import { formatCoins, coinsToDms } from "@/lib/ads";
+
+const formatDMs = (n: number) => n.toLocaleString("pt-BR");
+const formatBRL = (cents: number) =>
+  (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 const Card = ({ icon: Icon, label, value, accent, sub, gradient }: { icon: any; label: string; value: string | number; accent?: string; sub?: string; gradient?: string }) => (
   <div className={`group relative rounded-2xl border border-border p-4 overflow-hidden transition-all hover:border-primary/40 hover:-translate-y-0.5 ${gradient ?? "bg-card"}`}>
